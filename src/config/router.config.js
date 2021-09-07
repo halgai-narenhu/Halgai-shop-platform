@@ -1,5 +1,5 @@
 // eslint-disable-next-line
-import { UserLayout, BasicLayout, BlankLayout } from '@/layouts'
+import { UserLayout, BasicLayout, } from '@/layouts'
 import { bxAnaalyse } from '@/core/icons'
 
 const RouteView = {
@@ -15,6 +15,35 @@ export const asyncRouterMap = [
     meta: { title: 'menu.home' },
     redirect: '/dashboard/workplace',
     children: [
+      // mall_management
+      {
+        path: '/mall_management',
+        name: 'mall_management',
+        component: RouteView,
+        redirect: '/mall_management/mall-list',
+        meta: { title: 'mall.mall_management', icon: 'shopping-cart', permission: ['mall_management'] },
+        children: [
+          {
+            path: '/mall_management/mall-list/:pageNo([1-9]\\d*)?',
+            name: 'MallListWrapper',
+            hideChildrenInMenu: true,
+            component: () => import('@/views/mall_list/TableList'),
+            meta: { title: 'mall.mall_management.mall_list', icon: 'shop', keepAlive: true, permission: ['mall_management'] }
+          },
+          {
+            path: '/mall_management/shop-list',
+            name: 'ShopList',
+            component: () => import('@/views/shop_list/TableList'),
+            meta: { title: 'mall.mall_management.shop_list', icon: 'shopping', keepAlive: true, permission: ['mall_management'] }
+          },
+          {
+            path: '/mall_management/order_list',
+            name: 'OrderList',
+            component: () => import('@/views/order_list/TableList'),
+            meta: { title: 'mall.mall_management.order_list', icon: 'profile', keepAlive: true, permission: ['mall_management'] }
+          }
+        ]
+      },
       // dashboard
       {
         path: '/dashboard',
@@ -31,7 +60,7 @@ export const asyncRouterMap = [
           },
           // 外部链接
           {
-            path: 'https://www.baidu.com/',
+            path: 'https://www.bing.com/',
             name: 'Monitor',
             meta: { title: 'menu.dashboard.monitor', target: '_blank' }
           },

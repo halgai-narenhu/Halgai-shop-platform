@@ -35,5 +35,9 @@ export default {
     'menu.account.center': '个人中心',
     'menu.account.settings': '个人设置',
     'menu.account.trigger': '触发报错',
-    'menu.account.logout': '退出登录'
+    'menu.account.logout': '退出登录',
+    'mall.mall_management': '商城管理',
+    'mall.mall_management.mall_list': '门店管理',
+    'mall.mall_management.shop_list': '商品管理',
+    'mall.mall_management.order_list': '订单管理'
 }
