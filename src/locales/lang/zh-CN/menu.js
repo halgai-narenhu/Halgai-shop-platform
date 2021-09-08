@@ -39,5 +39,11 @@ export default {
     'mall.mall_management': '商城管理',
     'mall.mall_management.mall_list': '门店管理',
     'mall.mall_management.shop_list': '商品管理',
-    'mall.mall_management.order_list': '订单管理'
+    'mall.mall_management.order_list': '订单管理',
+    'mall.mall_management.category': '商品分类',
+    'mall.mall_management.refund': '退款统计',
+    'mall.mall_management.appraise': '评价管理',
+    'mall.mall_management.size': '规格尺寸',
+    'mall.mall_management.orderset': '订单设置',
+    'mall.mall_management.addmall': '增加门店'
 }

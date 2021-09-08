@@ -5,29 +5,23 @@
         <a-form layout="inline">
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
-              <a-form-item label="店铺编号">
+              <a-form-item label="规则编号">
                 <a-input v-model="queryParam.id" placeholder=""/>
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
-              <a-form-item label="店铺状态">
+              <a-form-item label="使用状态">
                 <a-select v-model="queryParam.status" placeholder="请选择" default-value="0">
-                  <a-select-option value="0">禁用</a-select-option>
-                  <a-select-option value="1">待审核</a-select-option>
-                  <a-select-option value="2">审核中</a-select-option>
-                  <a-select-option value="3">正常</a-select-option>
+                  <a-select-option value="0">全部</a-select-option>
+                  <a-select-option value="1">关闭</a-select-option>
+                  <a-select-option value="2">运行中</a-select-option>
                 </a-select>
               </a-form-item>
             </a-col>
             <template v-if="advanced">
               <a-col :md="8" :sm="24">
-                <a-form-item label="店铺名称">
-                  <a-input v-model="queryParam.mallname" style="width: 100%"/>
-                </a-form-item>
-              </a-col>
-              <a-col :md="8" :sm="24">
-                <a-form-item label="店铺类型">
-                  <a-input v-model="queryParam.malltype" style="width: 100%"/>
+                <a-form-item label="调用次数">
+                  <a-input-number v-model="queryParam.callNo" style="width: 100%"/>
                 </a-form-item>
               </a-col>
               <a-col :md="8" :sm="24">
@@ -36,24 +30,27 @@
                 </a-form-item>
               </a-col>
               <a-col :md="8" :sm="24">
-                <a-form-item label="店铺地址">
-                  <a-input v-model="queryParam.address" style="width: 100%"/>
+                <a-form-item label="使用状态">
+                  <a-select v-model="queryParam.useStatus" placeholder="请选择" default-value="0">
+                    <a-select-option value="0">全部</a-select-option>
+                    <a-select-option value="1">关闭</a-select-option>
+                    <a-select-option value="2">运行中</a-select-option>
+                  </a-select>
                 </a-form-item>
               </a-col>
               <a-col :md="8" :sm="24">
-                <a-form-item label="店铺状态">
+                <a-form-item label="使用状态">
                   <a-select placeholder="请选择" default-value="0">
-                    <a-select-option value="0">禁用</a-select-option>
-                    <a-select-option value="1">待审核</a-select-option>
-                    <a-select-option value="2">审核中</a-select-option>
-                    <a-select-option value="3">正常</a-select-option>
+                    <a-select-option value="0">全部</a-select-option>
+                    <a-select-option value="1">关闭</a-select-option>
+                    <a-select-option value="2">运行中</a-select-option>
                   </a-select>
                 </a-form-item>
               </a-col>
             </template>
             <a-col :md="!advanced && 8 || 24" :sm="24">
               <span class="table-page-search-submitButtons" :style="advanced && { float: 'right', overflow: 'hidden' } || {} ">
-                <a-button icon="search" type="primary" @click="$refs.table.refresh(true)">搜索</a-button>
+                <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
                 <a-button style="margin-left: 8px" @click="() => this.queryParam = {}">重置</a-button>
                 <a @click="toggleAdvanced" style="margin-left: 8px">
                   {{ advanced ? '收起' : '展开' }}
@@ -66,7 +63,7 @@
       </div>
 
       <div class="table-operator">
-        <a-button type="primary" icon="plus" @click="handleAdd">添加</a-button>
+        <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>
         <a-dropdown v-action:edit v-if="selectedRowKeys.length > 0">
           <a-menu slot="overlay">
             <a-menu-item key="1"><a-icon type="delete" />删除</a-menu-item>
@@ -101,9 +98,9 @@
 
         <span slot="action" slot-scope="text, record">
           <template>
-            <a @click="handleEdit(record)">编辑</a>
+            <a @click="handleEdit(record)">配置</a>
             <a-divider type="vertical" />
-            <a @click="handleSub(record)">删除</a>
+            <a @click="handleSub(record)">订阅报警</a>
           </template>
         </span>
       </s-table>
@@ -131,20 +128,20 @@ import CreateForm from './modules/CreateForm'
 
 const columns = [
   {
-    title: '编号/类型',
+    title: '#',
     scopedSlots: { customRender: 'serial' }
   },
   {
-    title: '地址',
+    title: '规则编号',
     dataIndex: 'no'
   },
   {
-    title: '名称',
+    title: '描述',
     dataIndex: 'description',
     scopedSlots: { customRender: 'description' }
   },
   {
-    title: '营销数据',
+    title: '服务调用次数',
     dataIndex: 'callNo',
     sorter: true,
     needTotal: true,
@@ -156,7 +153,7 @@ const columns = [
     scopedSlots: { customRender: 'status' }
   },
   {
-    title: '添加/修改时间',
+    title: '更新时间',
     dataIndex: 'updatedAt',
     sorter: true
   },
@@ -171,19 +168,19 @@ const columns = [
 const statusMap = {
   0: {
     status: 'default',
-    text: '待审核'
+    text: '关闭'
   },
   1: {
     status: 'processing',
-    text: '待审核'
+    text: '运行中'
   },
   2: {
     status: 'success',
-    text: '正常'
+    text: '已上线'
   },
   3: {
     status: 'error',
-    text: '禁用'
+    text: '异常'
   }
 }
 

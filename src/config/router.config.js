@@ -27,8 +27,15 @@ export const asyncRouterMap = [
             path: '/mall_management/mall-list/:pageNo([1-9]\\d*)?',
             name: 'MallListWrapper',
             hideChildrenInMenu: true,
-            component: () => import('@/views/mall_list/TableList'),
+            component: () => import('@/views/mall_list/MallList'),
             meta: { title: 'mall.mall_management.mall_list', icon: 'shop', keepAlive: true, permission: ['mall_management'] }
+          },
+          {
+            path: '/mall_management/mall-list/AddMall',
+            name: 'AddMall',
+            hidden: true,
+            component: () => import('@/views/mall_list/AddMall'),
+            meta: { title: 'mall.mall_management.addmall', keepAlive: true, permission: ['mall_management'] }
           },
           {
             path: '/mall_management/shop-list',
@@ -37,10 +44,40 @@ export const asyncRouterMap = [
             meta: { title: 'mall.mall_management.shop_list', icon: 'shopping', keepAlive: true, permission: ['mall_management'] }
           },
           {
+            path: '/mall_management/shop_category',
+            name: 'ShopCategory',
+            component: () => import('@/views/shop_category/TableList'),
+            meta: { title: 'mall.mall_management.category', icon: 'appstore', keepAlive: true, permission: ['mall_management'] }
+          },
+          {
+            path: '/mall_management/size',
+            name: 'Size',
+            component: () => import('@/views/size/Size'),
+            meta: { title: 'mall.mall_management.size', icon: 'calculator', keepAlive: true, permission: ['mall_management'] }
+          },
+          {
             path: '/mall_management/order_list',
             name: 'OrderList',
             component: () => import('@/views/order_list/TableList'),
             meta: { title: 'mall.mall_management.order_list', icon: 'profile', keepAlive: true, permission: ['mall_management'] }
+          },
+          {
+            path: '/mall_management/order_setting',
+            name: 'OrderSetting',
+            component: () => import('@/views/order_setting/OrderSet'),
+            meta: { title: 'mall.mall_management.orderset', icon: 'setting', keepAlive: true, permission: ['mall_management'] }
+          },
+          {
+            path: '/mall_management/refund',
+            name: 'Refund',
+            component: () => import('@/views/refund/TableList'),
+            meta: { title: 'mall.mall_management.refund', icon: 'area-chart', keepAlive: true, permission: ['mall_management'] }
+          },
+          {
+            path: '/mall_management/appraise',
+            name: 'Appraise',
+            component: () => import('@/views/appraise/TableList'),
+            meta: { title: 'mall.mall_management.appraise', icon: 'reconciliation', keepAlive: true, permission: ['mall_management'] }
           }
         ]
       },

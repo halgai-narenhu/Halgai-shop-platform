@@ -1,6 +1,6 @@
 <template>
   <a-modal
-    title="门店管理"
+    title="新建规则"
     :width="640"
     :visible="visible"
     :confirmLoading="loading"
