@@ -121,17 +121,37 @@ import CreateForm from './modules/CreateForm'
 
 const columns = [
   {
-    title: '编号/类型',
+    // 字段id
+    title: 'id',
     scopedSlots: { customRender: 'serial' }
   },
   {
-    title: '地址',
+    // 字段name
+    title: '门店名称',
+    dataIndex: 'description',
+    scopedSlots: { customRender: 'description' }
+  },
+  {
+    // domain
+    title: '门店域名',
     dataIndex: 'no'
   },
   {
-    title: '名称',
-    dataIndex: 'description',
-    scopedSlots: { customRender: 'description' }
+    // mallAdminUserId
+    title: '用户ID',
+    dataIndex: 'no'
+  },
+  {
+    // status
+    title: '状态',
+    dataIndex: 'status',
+    scopedSlots: { customRender: 'status' }
+  },
+  {
+    // shopLevelID
+    title: '门店级别',
+    dataIndex: 'status',
+    scopedSlots: { customRender: 'status' }
   },
   {
     title: '营销数据',
@@ -139,11 +159,6 @@ const columns = [
     sorter: true,
     needTotal: true,
     customRender: (text) => text + ' 次'
-  },
-  {
-    title: '状态',
-    dataIndex: 'status',
-    scopedSlots: { customRender: 'status' }
   },
   {
     title: '添加/修改时间',
