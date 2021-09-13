@@ -1,7 +1,7 @@
 import Mock from 'mockjs2'
 import { builder, getQueryParameters } from '../util'
 
-const totalCount = 5701
+const totalCount = 57
 
 const serverList = (options) => {
   const parameters = getQueryParameters(options)
@@ -17,11 +17,18 @@ const serverList = (options) => {
     const tmpKey = key + i
     result.push({
       key: tmpKey,
-      id: tmpKey,
-      no: 'No ' + tmpKey,
-      description: '这是一段描述',
+      id: Mock.mock('@guid'),
+      domain: Mock.mock('@domain'),
+      name: Mock.mock('@cname') + '的门店',
+      isCompany: Mock.mock('@integer(0, 1)'),
+      dataUpdate: Mock.mock('@datetime'),
+      dataAdd: Mock.mock('@datetime'),
+      lang: Mock.mock('@pick(CN,EN,US,JP,FR,UK,TW,HK)'),
+      vipPlanCd: Mock.mock('@integer(1, 365)'),
+      shopLevelID: Mock.mock('@integer(0, 3)'),
+      mallAdminUserId: Mock.mock('@integer(1111, 9999)'),
       callNo: Mock.mock('@integer(1, 999)'),
-      status: Mock.mock('@integer(0, 3)'),
+      status: Mock.mock('@integer(0, 2)'),
       updatedAt: Mock.mock('@datetime'),
       editable: false
     })

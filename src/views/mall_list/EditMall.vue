@@ -3,15 +3,15 @@
     <a-card :body-style="{padding: '24px 32px'}" :bordered="false">
       <a-form @submit="handleSubmit" :form="form">
         <a-form-item
-          :label="$t('店铺类型')"
+          :label="$t('id')"
           :labelCol="{lg: {span: 7}, sm: {span: 7}}"
           :wrapperCol="{lg: {span: 10}, sm: {span: 17} }">
           <a-input
             v-decorator="[
-              'shoptype',
+              'id',
               {rules: [{ required: true, message: $t('请输入店铺类型') }]}
             ]"
-            name="shoptype"
+            name="id"
             :placeholder="$t('自定义店铺类型，32个字符以内')" />
         </a-form-item>
         <a-form-item
