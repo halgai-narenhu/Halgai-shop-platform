@@ -143,7 +143,7 @@ import CreateForm from './modules/CreateForm'
 
 const columns = [
   {
-    title: '序号',
+    title: '#',
     scopedSlots: { customRender: 'serial' }
   },
   {

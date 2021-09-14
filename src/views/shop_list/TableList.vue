@@ -89,6 +89,42 @@
         <span slot="serial" slot-scope="text, record, index">
           {{ index + 1 }}
         </span>
+        <span slot="id" slot-scope="text">
+          {{ text }}
+        </span>
+        <span slot="name" slot-scope="text">
+          {{ text }}
+        </span>
+        <span slot="domain" slot-scope="text">
+          {{ text }}
+        </span>
+        <span slot="numberOrders" slot-scope="text">
+          {{ text }}
+        </span>
+        <span slot="numberSells" slot-scope="text">
+          {{ text }}
+        </span>
+        <span slot="originalPrice" slot-scope="text">
+          {{ text }}
+        </span>
+        <span slot="pic" slot-scope="text">
+          {{ text }}
+        </span>
+        <span slot="stores" slot-scope="text">
+          {{ text }}
+        </span>
+        <span slot="views" slot-scope="text">
+          {{ text }}
+        </span>
+        <span slot="statusStr" slot-scope="text">
+          {{ text }}
+        </span>
+        <span slot="pic" slot-scope="text">
+          {{ text }}
+        </span>
+        <span slot="pic" slot-scope="text">
+          {{ text }}
+        </span>
         <span slot="status" slot-scope="text">
           <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
         </span>
@@ -98,9 +134,11 @@
 
         <span slot="action" slot-scope="text, record">
           <template>
-            <a @click="handleEdit(record)">配置</a>
+            <a @click="handleDetail(record)">详情</a>
             <a-divider type="vertical" />
-            <a @click="handleSub(record)">订阅报警</a>
+            <a @click="handleSub(record)">编辑</a>
+            <a-divider type="vertical" />
+            <a @click="handleSub(record)">删除</a>
           </template>
         </span>
       </s-table>
@@ -121,7 +159,7 @@
 <script>
 import moment from 'moment'
 import { STable, Ellipsis } from '@/components'
-import { getRoleList, getServiceList } from '@/api/manage'
+import { getGoodslist, getRoleList } from '@/api/manage'
 
 import StepByStepModal from './modules/StepByStepModal'
 import CreateForm from './modules/CreateForm'
@@ -132,31 +170,209 @@ const columns = [
     scopedSlots: { customRender: 'serial' }
   },
   {
-    title: '规则编号',
-    dataIndex: 'no'
+    // id
+    title: '商品ID',
+    dataIndex: 'id'
   },
   {
-    title: '描述',
-    dataIndex: 'description',
-    scopedSlots: { customRender: 'description' }
+    // name
+    title: '商品名称',
+    dataIndex: 'name'
+  },
+  // {
+  //   // barCode
+  //   title: '条形码',
+  //   dataIndex: 'callNo',
+  //   sorter: true,
+  //   needTotal: true,
+  //   customRender: (text) => text + ' 次'
+  // },
+  // {
+  //   // categoryId
+  //   title: '类别ID',
+  //   dataIndex: 'no'
+  // },
+  {
+    // domain
+    title: '门店域名',
+    dataIndex: 'domain'
+  },
+  // {
+  //   // characteristic
+  //   title: '商品特征',
+  //   dataIndex: 'no'
+  // },
+  // {
+  //   // commission
+  //   title: '佣金',
+  //   dataIndex: 'no'
+  // },
+  // {
+  //   // commissionType
+  //   title: '佣金类型',
+  //   dataIndex: 'no'
+  // },
+  // {
+  //   // gotScore
+  //   title: '积分',
+  //   dataIndex: 'no'
+  // },
+  // {
+  //   // gotScoreType
+  //   title: '积分类型',
+  //   dataIndex: 'no'
+  // },
+  // {
+  //   // kanjia
+  //   title: '砍价',
+  //   dataIndex: 'no'
+  // },
+  // {
+  //   // kanjiaPrice
+  //   title: '砍价价格',
+  //   dataIndex: 'no'
+  // },
+  // {
+  //   // logisticsId
+  //   title: '物流',
+  //   dataIndex: 'no'
+  // },
+  // {
+  //   // minPrice
+  //   title: '最低价',
+  //   dataIndex: 'no'
+  // },
+  // {
+  //   // minScore
+  //   title: '最低积分',
+  //   dataIndex: 'no'
+  // },
+  // {
+  //   // numberFav
+  //   title: '不详',
+  //   dataIndex: 'no'
+  // },
+  // {
+  //   // numberGoodReputation
+  //   title: '信誉度',
+  //   dataIndex: 'no'
+  // },
+  {
+    // numberOrders
+    title: '订单数量',
+    dataIndex: 'numberOrders'
   },
   {
-    title: '服务调用次数',
-    dataIndex: 'callNo',
-    sorter: true,
-    needTotal: true,
-    customRender: (text) => text + ' 次'
+    // numberSells
+    title: '售出数量',
+    dataIndex: 'numberSells'
   },
   {
-    title: '状态',
-    dataIndex: 'status',
-    scopedSlots: { customRender: 'status' }
+    // originalPrice
+    title: '原价',
+    dataIndex: 'originalPrice'
   },
+  // {
+  //   // paixu
+  //   title: '排序',
+  //   dataIndex: 'updatedAt',
+  //   sorter: true
+  // },
   {
-    title: '更新时间',
-    dataIndex: 'updatedAt',
-    sorter: true
+    // pic
+    title: '商品图片',
+    dataIndex: 'pic'
   },
+  // {
+  //   // pingtuan
+  //   title: '拼团',
+  //   dataIndex: 'no'
+  // },
+  // {
+  //   // pingtuanPrice
+  //   title: '拼团价',
+  //   dataIndex: 'no'
+  // },
+  // {
+  //   // recommendStatus
+  //   title: '推荐状态',
+  //   dataIndex: 'no'
+  // },
+  // {
+  //   // shopId
+  //   title: '门店ID',
+  //   dataIndex: 'no'
+  // },
+  // {
+  //   // status
+  //   title: '状态',
+  //   dataIndex: 'no'
+  // },
+  {
+    // stores
+    title: '库存',
+    dataIndex: 'stores'
+  },
+  // {
+  //   // userId
+  //   title: '用户ID',
+  //   dataIndex: 'no'
+  // },
+  {
+    // views
+    title: '浏览数',
+    dataIndex: 'views'
+  },
+  // {
+  //   // weight
+  //   title: '重量',
+  //   dataIndex: 'no'
+  // },
+  // {
+  //   // videoId
+  //   title: '视频ID',
+  //   dataIndex: 'no'
+  // },
+  // {
+  //   // tags
+  //   title: '标签',
+  //   dataIndex: 'no'
+  // },
+  // {
+  //   // propertyIds
+  //   title: '不详',
+  //   dataIndex: 'no'
+  // },
+  // {
+  //   // recommendStatusStr
+  //   title: '推荐状态',
+  //   dataIndex: 'no'
+  // },
+  {
+    // statusStr
+    title: '商品状态',
+    dataIndex: 'statusStr'
+  },
+  // {
+  //   // dateAdd
+  //   title: '添加时间',
+  //   dataIndex: 'no'
+  // },
+  // {
+  //   // dateStart
+  //   title: '开始时间',
+  //   dataIndex: 'no'
+  // },
+  // {
+  //   // dateUpdate
+  //   title: '更新时间',
+  //   dataIndex: 'no'
+  // },
+  // {
+  //   // content
+  //   title: '描述',
+  //   dataIndex: 'no'
+  // },
   {
     title: '操作',
     dataIndex: 'action',
@@ -207,7 +423,7 @@ export default {
       loadData: parameter => {
         const requestParameters = Object.assign({}, parameter, this.queryParam)
         console.log('loadData request parameters:', requestParameters)
-        return getServiceList(requestParameters)
+        return getGoodslist(requestParameters)
           .then(res => {
             return res.result
           })
@@ -236,6 +452,9 @@ export default {
     }
   },
   methods: {
+    handleDetail (record) {
+      this.$router.push({ name: 'ShopDetail', params: record })
+    },
     handleAdd () {
       this.mdl = null
       this.visible = true

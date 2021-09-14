@@ -1,5 +1,6 @@
 import Mock from 'mockjs2'
 import { builder, getQueryParameters } from '../util'
+const Random = require('mockjs2').Random
 
 const totalCount = 57
 
@@ -30,6 +31,73 @@ const serverList = (options) => {
       callNo: Mock.mock('@integer(1, 999)'),
       status: Mock.mock('@integer(0, 2)'),
       updatedAt: Mock.mock('@datetime'),
+      editable: false
+    })
+  }
+
+  return builder({
+    pageSize: pageSize,
+    pageNo: pageNo,
+    totalCount: totalCount,
+    totalPage: totalPage,
+    data: result
+  })
+}
+
+const goodsList = (options) => {
+  const parameters = getQueryParameters(options)
+
+  const result = []
+  const pageNo = parseInt(parameters.pageNo)
+  const pageSize = parseInt(parameters.pageSize)
+  const totalPage = Math.ceil(totalCount / pageSize)
+  const key = (pageNo - 1) * pageSize
+  const next = (pageNo >= totalPage ? (totalCount % pageSize) : pageSize) + 1
+
+  for (let i = 1; i < next; i++) {
+    const tmpKey = key + i
+    result.push({
+      key: tmpKey,
+      id: Mock.mock('@integer(4000, 8000)'),
+      domain: Mock.mock('@domain'),
+      name: Mock.mock('@cword(3)' + '@pick(毛衣,毛裤,上衣,短袖,鞋,短裤,袜子,手套)'),
+      numberOrders: Mock.mock('@integer(0, 500)'),
+      numberSells: Mock.mock('@integer(0, 500)' + ' 件'),
+      originalPrice: Mock.mock('￥' + '@integer(200, 500)'),
+      pic: Mock.mock(Random.image('200x100')),
+      stores: Mock.mock('@integer(0, 500)' + ' 件'),
+      views: Mock.mock('@integer(4000, 8000)' + ' 次'),
+      statusStr: Mock.mock('@pick(已上架,已下架)'),
+      barCode: Mock.mock('@integer(11111111111111, 99999999999999)'),
+      categoryId: Mock.mock('@integer(4000, 8000)'),
+      characteristic: Mock.mock('@pick(保暖雨鞋,拼色打底袜,可爱打底袜,中小童毛衣,小狗图案毛衣,小童毛衣背心,小童爆款马甲 这个天气刚刚好穿,多色可选的马甲,可爱毛衣,女孩子喜欢的圈圈毛衣 加绒,加绒毛衣 性价比高,加绒毛衣 中大童,加绒毛衣 不久的北方就要穿到了,高品质的夹克外套,貂绒毛衣 男孩女孩都适合,男童风衣,兔毛 手感好 质量更好)'),
+      commission: Mock.mock('￥' + '@integer(20, 50)'),
+      commissionType: Mock.mock('@pick(分销佣金,推荐佣金,拼团佣金,提货佣金)'),
+      gotScore: Mock.mock('@integer(0, 500)' + ' 分'),
+      gotScoreType: Mock.mock('@pick(固定积分,推荐积分,分销积分)'),
+      kanjia: Mock.mock('@pick(是,否)'),
+      kanjiaPrice: Mock.mock('￥' + '@integer(20, 50)'),
+      logisticsId: Mock.mock('@pick(京东物流,韵达物流,兄弟物流，EMS物流，德邦物流)'),
+      minPrice: Mock.mock('￥' + '@integer(200, 500)'),
+      minScore: Mock.mock('@integer(10, 50)' + ' 分'),
+      numberFav: Mock.mock('￥' + '@integer(20, 50)'),
+      numberGoodReputation: Mock.mock('@integer(0, 100)'),
+      paixu: Mock.mock('@integer(1000, 9000)'),
+      pingtuan: Mock.mock('@pick(是,否)'),
+      pingtuanPrice: Mock.mock('￥' + '@integer(50, 100)'),
+      recommendStatus: Mock.mock('@pick(推荐,正常)'),
+      shopId: Mock.mock('@integer(4000, 8000)'),
+      status: Mock.mock('@pick(正常,禁用)'),
+      userId: Mock.mock('@integer(4000, 8000)'),
+      weight: Mock.mock('@integer(1, 5)' + ' kg'),
+      videoId: Mock.mock('@integer(11111111111, 99999999999)'),
+      tags: Mock.mock('@pick(火爆,网红款,爆款,平价,活动,特价,直营)'),
+      propertyIds: Mock.mock('@integer(4000, 8000)'),
+      recommendStatusStr: Mock.mock('@pick(推荐,不推荐)'),
+      dateAdd: Mock.mock('@datetime'),
+      dateStart: Mock.mock('@datetime'),
+      dateUpdate: Mock.mock('@datetime'),
+      content: Mock.mock('@cparagraph'),
       editable: false
     })
   }
@@ -252,6 +320,7 @@ const radar = () => {
   ])
 }
 
+Mock.mock(/\/goods/, 'get', goodsList)
 Mock.mock(/\/service/, 'get', serverList)
 Mock.mock(/\/list\/search\/projects/, 'get', projects)
 Mock.mock(/\/workplace\/activity/, 'get', activity)
