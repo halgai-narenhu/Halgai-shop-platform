@@ -12,10 +12,9 @@
             <a-col :md="8" :sm="24">
               <a-form-item label="店铺状态">
                 <a-select v-model="queryParam.status" placeholder="请选择" default-value="0">
-                  <a-select-option value="0">禁用</a-select-option>
-                  <a-select-option value="1">待审核</a-select-option>
-                  <a-select-option value="2">审核中</a-select-option>
-                  <a-select-option value="3">正常</a-select-option>
+                  <a-select-option value="0">正常</a-select-option>
+                  <a-select-option value="1">禁用</a-select-option>
+                  <a-select-option value="2">待审核</a-select-option>
                 </a-select>
               </a-form-item>
             </a-col>
@@ -56,7 +55,7 @@
       </div>
 
       <div class="table-operator">
-        <a-button type="primary" icon="plus" @click="handleAdd">添加</a-button>
+        <!-- <a-button type="primary" icon="plus" @click="handleAdd">添加</a-button> -->
         <a-dropdown v-action:edit v-if="selectedRowKeys.length > 0">
           <a-menu slot="overlay">
             <a-menu-item key="1"><a-icon type="delete" />删除</a-menu-item>
@@ -82,13 +81,36 @@
         <span slot="serial" slot-scope="text, record, index">
           {{ index + 1 }}
         </span>
+        <span slot="id" slot-scope="text">
+          <ellipsis :length="4" tooltip>{{ text }}</ellipsis>
+        </span>
+        <span slot="name" slot-scope="text">
+          <ellipsis :length="8" tooltip>{{ text }}门店</ellipsis>
+        </span>
+        <span slot="mallAdminUserId" slot-scope="text">
+          {{ text }}
+        </span>
+        <span slot="vipPlanCd" slot-scope="text">
+          {{ text }}
+        </span>
+        <span slot="lang" slot-scope="text">
+          {{ text }}
+        </span>
+        <span slot="shopLevelID" slot-scope="text">
+          {{ text | levelFilter }}
+        </span>
+        <span slot="isCompany" slot-scope="text">
+          {{ text | companyFilter }}
+        </span>
+        <span slot="dataUpdate" slot-scope="text">
+          {{ text }}
+        </span>
+        <span slot="dataAdd" slot-scope="text">
+          {{ text }}
+        </span>
         <span slot="status" slot-scope="text">
           <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
         </span>
-        <span slot="description" slot-scope="text">
-          <ellipsis :length="4" tooltip>{{ text }}</ellipsis>
-        </span>
-
         <span slot="action" slot-scope="text, record">
           <template>
             <a @click="handleEdit(record)">编辑</a>
@@ -121,25 +143,30 @@ import CreateForm from './modules/CreateForm'
 
 const columns = [
   {
+    title: '序号',
+    scopedSlots: { customRender: 'serial' }
+  },
+  {
     // 字段id
     title: 'id',
-    scopedSlots: { customRender: 'serial' }
+    dataIndex: 'id',
+    scopedSlots: { customRender: 'id' }
   },
   {
     // 字段name
     title: '门店名称',
-    dataIndex: 'description',
-    scopedSlots: { customRender: 'description' }
+    dataIndex: 'name',
+    scopedSlots: { customRender: 'name' }
   },
   {
     // domain
     title: '门店域名',
-    dataIndex: 'no'
+    dataIndex: 'domain'
   },
   {
     // mallAdminUserId
     title: '用户ID',
-    dataIndex: 'no'
+    dataIndex: 'mallAdminUserId'
   },
   {
     // status
@@ -148,22 +175,38 @@ const columns = [
     scopedSlots: { customRender: 'status' }
   },
   {
+    // lang
+    title: '语言',
+    dataIndex: 'lang',
+    scopedSlots: { customRender: 'lang' }
+  },
+  {
     // shopLevelID
     title: '门店级别',
-    dataIndex: 'status',
-    scopedSlots: { customRender: 'status' }
+    dataIndex: 'shopLevelID',
+    scopedSlots: { customRender: 'shopLevelID' }
   },
   {
-    title: '营销数据',
-    dataIndex: 'callNo',
-    sorter: true,
-    needTotal: true,
-    customRender: (text) => text + ' 次'
+    // vipPlanCd
+    title: 'VIP剩余天数',
+    dataIndex: 'vipPlanCd',
+    customRender: (text) => text + ' 天'
   },
   {
-    title: '添加/修改时间',
-    dataIndex: 'updatedAt',
-    sorter: true
+    // isCompany
+    title: '个人/公司',
+    dataIndex: 'isCompany',
+    scopedSlots: { customRender: 'isCompany' }
+  },
+  {
+    // dataAdd
+    title: '登录日期',
+    dataIndex: 'dataAdd'
+  },
+  {
+    // dataUpdate
+    title: '更新日期',
+    dataIndex: 'dataUpdate'
   },
   {
     title: '操作',
@@ -172,23 +215,28 @@ const columns = [
     scopedSlots: { customRender: 'action' }
   }
 ]
-
+const companyMap = {
+  0: { text: '个人' },
+  1: { text: '公司' }
+}
+const levelMap = {
+  0: { text: '白银' },
+  1: { text: '黄金' },
+  2: { text: '铂金' },
+  3: { text: '钻石' }
+}
 const statusMap = {
   0: {
-    status: 'default',
-    text: '待审核'
-  },
-  1: {
-    status: 'processing',
-    text: '待审核'
-  },
-  2: {
     status: 'success',
     text: '正常'
   },
-  3: {
-    status: 'error',
+  1: {
+    status: 'processing',
     text: '禁用'
+  },
+  2: {
+    status: 'default',
+    text: '待审核'
   }
 }
 
@@ -225,6 +273,12 @@ export default {
     }
   },
   filters: {
+    companyFilter (type) {
+      return companyMap[type].text
+    },
+    levelFilter (type) {
+      return levelMap[type].text
+    },
     statusFilter (type) {
       return statusMap[type].text
     },
@@ -244,10 +298,11 @@ export default {
     }
   },
   methods: {
-    handleAdd () {
-      this.$router.push('/mall_management/mall-list/AddMall')
-    },
+    // handleAdd () {
+    //   this.$router.push('/mall_management/mall-list/AddMall')
+    // },
     handleEdit (record) {
+      console.log('recordddd', record)
       this.visible = true
       this.mdl = { ...record }
     },
@@ -257,7 +312,7 @@ export default {
       form.validateFields((errors, values) => {
         if (!errors) {
           console.log('values', values)
-          if (values.id > 0) {
+          if (values.id) {
             // 修改 e.g.
             new Promise((resolve, reject) => {
               setTimeout(() => {
@@ -302,10 +357,10 @@ export default {
       form.resetFields() // 清理表单数据（可不做）
     },
     handleSub (record) {
-      if (record.status !== 0) {
-        this.$message.info(`${record.no} 订阅成功`)
+      if (record) {
+        this.$message.info(`删除成功`)
       } else {
-        this.$message.error(`${record.no} 订阅失败，规则已关闭`)
+        this.$message.error(`删除失败`)
       }
     },
     onSelectChange (selectedRowKeys, selectedRows) {

@@ -31,11 +31,11 @@ export const asyncRouterMap = [
             meta: { title: 'mall.mall_management.mall_list', icon: 'shop', keepAlive: true, permission: ['mall_management'] }
           },
           {
-            path: '/mall_management/mall-list/AddMall',
-            name: 'AddMall',
+            path: '/mall_management/mall-list/EditMall',
+            name: 'EditMall',
             hidden: true,
-            component: () => import('@/views/mall_list/AddMall'),
-            meta: { title: 'mall.mall_management.addmall', keepAlive: true, permission: ['mall_management'] }
+            component: () => import('@/views/mall_list/EditMall'),
+            meta: { title: 'mall.mall_management.editmall', keepAlive: true, permission: ['mall_management'] }
           },
           {
             path: '/mall_management/shop-list',
