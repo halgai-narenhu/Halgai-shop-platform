@@ -45,5 +45,6 @@ export default {
     'mall.mall_management.appraise': '评价管理',
     'mall.mall_management.size': '规格尺寸',
     'mall.mall_management.orderset': '订单设置',
-    'mall.mall_management.editmall': '编辑门店'
+    'mall.mall_management.editmall': '编辑门店',
+    'mall.mall_management.shopdetail': '商品详情'
 }

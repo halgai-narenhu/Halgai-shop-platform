@@ -44,6 +44,13 @@ export const asyncRouterMap = [
             meta: { title: 'mall.mall_management.shop_list', icon: 'shopping', keepAlive: true, permission: ['mall_management'] }
           },
           {
+            path: '/mall_management/shop-list/ShopDetail',
+            name: 'ShopDetail',
+            hidden: true,
+            component: () => import('@/views/shop_list/ShopDetail'),
+            meta: { title: 'mall.mall_management.shopdetail', keepAlive: true, permission: ['mall_management'] }
+          },
+          {
             path: '/mall_management/shop_category',
             name: 'ShopCategory',
             component: () => import('@/views/shop_category/TableList'),
