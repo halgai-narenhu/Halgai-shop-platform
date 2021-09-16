@@ -136,7 +136,7 @@
           <template>
             <a @click="handleDetail(record)">详情</a>
             <a-divider type="vertical" />
-            <a @click="handleSub(record)">编辑</a>
+            <a @click="handleEdit(record)">编辑</a>
             <a-divider type="vertical" />
             <a @click="handleSub(record)">删除</a>
           </template>
@@ -460,8 +460,7 @@ export default {
       this.visible = true
     },
     handleEdit (record) {
-      this.visible = true
-      this.mdl = { ...record }
+      this.$router.push({ name: 'ShopEdit', params: record })
     },
     handleOk () {
       const form = this.$refs.createModal.form
