@@ -60,7 +60,7 @@ export const asyncRouterMap = [
           {
             path: '/mall_management/shop_category',
             name: 'ShopCategory',
-            component: () => import('@/views/shop_category/TableList'),
+            component: () => import('@/views/shop_category/Category'),
             meta: { title: 'mall.mall_management.category', icon: 'appstore', keepAlive: true, permission: ['mall_management'] }
           },
           {
@@ -74,6 +74,13 @@ export const asyncRouterMap = [
             name: 'OrderList',
             component: () => import('@/views/order_list/TableList'),
             meta: { title: 'mall.mall_management.order_list', icon: 'profile', keepAlive: true, permission: ['mall_management'] }
+          },
+          {
+            path: '/mall_management/order_list/OrderDetail',
+            name: 'OrderDetail',
+            hidden: true,
+            component: () => import('@/views/order_list/OrderDetail'),
+            meta: { title: 'mall.mall_management.orderdetail', keepAlive: true, permission: ['mall_management'] }
           },
           {
             path: '/mall_management/order_setting',

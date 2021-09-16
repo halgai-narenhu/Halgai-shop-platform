@@ -47,5 +47,6 @@ export default {
     'mall.mall_management.orderset': '订单设置',
     'mall.mall_management.editmall': '编辑门店',
     'mall.mall_management.shopdetail': '商品详情',
-    'mall.mall_management.shopedit': '编辑商品'
+    'mall.mall_management.shopedit': '编辑商品',
+    'mall.mall_management.orderdetail': '订单详情'
 }

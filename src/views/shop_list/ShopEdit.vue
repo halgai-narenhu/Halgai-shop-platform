@@ -7,7 +7,7 @@
           :labelCol="{ lg: { span: 7 }, sm: { span: 7 } }"
           :wrapperCol="{ lg: { span: 10 }, sm: { span: 17 } }"
         >
-          <a-input v-decorator="['id']" name="id" />
+          <a-input v-decorator="['id']" name="id" disabled />
         </a-form-item>
         <a-form-item
           :label="$t('商品名称')"
@@ -148,14 +148,14 @@
           :labelCol="{ lg: { span: 7 }, sm: { span: 7 } }"
           :wrapperCol="{ lg: { span: 10 }, sm: { span: 17 } }"
         >
-          <a-input type="number" v-decorator="['numberSells']" name="numberSells" :placeholder="$t('自定义店铺类型，32个字符以内')" />
+          <a-input v-decorator="['numberSells']" name="numberSells" :placeholder="$t('自定义店铺类型，32个字符以内')" />
         </a-form-item>
         <a-form-item
           :label="$t('原价')"
           :labelCol="{ lg: { span: 7 }, sm: { span: 7 } }"
           :wrapperCol="{ lg: { span: 10 }, sm: { span: 17 } }"
         >
-          <a-input type="number" v-decorator="['originalPrice']" name="originalPrice" :placeholder="$t('自定义店铺类型，32个字符以内')" />
+          <a-input v-decorator="['originalPrice']" name="originalPrice" :placeholder="$t('自定义店铺类型，32个字符以内')" />
         </a-form-item>
         <a-form-item
           :label="$t('排序')"
@@ -250,8 +250,7 @@
 import pick from 'lodash.pick'
 
 // 表单字段
-const fields = ['name', 'id', 'domain', 'mallAdminUserId', 'status', 'lang', 'shopLevelID', 'vipPlanCd', 'isCompany', 'dataAdd', 'dataUpdate']
-
+const fields = ['id', 'name', 'barCode', 'categoryId', 'domain', 'characteristic', 'commission', 'commissionType', 'gotScore', 'gotScoreType', 'kanjia', 'kanjiaPrice', 'logisticsId', 'minPrice', 'minScore', 'numberFav', 'numberGoodReputation', 'numberOrders', 'numberSells', 'originalPrice', 'paixu', 'pic', 'pingtuan', 'pingtuanPrice', 'recommendStatus', 'shopId', 'status', 'stores', 'userId', 'views', 'weight', 'videoId', 'tags', 'propertyIds', 'recommendStatusStr', 'statusStr', 'dateAdd', 'dateStart', 'dateUpdate', 'content']
 export default {
   name: 'ShopEdit',
   data () {
@@ -264,10 +263,7 @@ export default {
     console.log('custom modal created')
     // 防止表单未注册
     fields.forEach(v => this.form.getFieldDecorator(v))
-    // 当 model 发生改变时，为表单设置值
-    this.$watch('param', () => {
-      this.param && this.form.setFieldsValue(pick(this.param, fields))
-    })
+    this.form.setFieldsValue(pick(this.param, fields))
   },
   methods: {
     // handler
