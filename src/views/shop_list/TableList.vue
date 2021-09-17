@@ -4,46 +4,27 @@
       <div class="table-page-search-wrapper">
         <a-form layout="inline">
           <a-row :gutter="48">
-            <a-col :md="8" :sm="24">
-              <a-form-item label="规则编号">
+            <a-col :md="4" :sm="24">
+              <a-form-item label="商品ID">
                 <a-input v-model="queryParam.id" placeholder=""/>
               </a-form-item>
             </a-col>
-            <a-col :md="8" :sm="24">
-              <a-form-item label="使用状态">
-                <a-select v-model="queryParam.status" placeholder="请选择" default-value="0">
-                  <a-select-option value="0">全部</a-select-option>
-                  <a-select-option value="1">关闭</a-select-option>
-                  <a-select-option value="2">运行中</a-select-option>
-                </a-select>
+            <a-col :md="4" :sm="24">
+              <a-form-item label="商品名称">
+                <a-input v-model="queryParam.name" placeholder=""/>
               </a-form-item>
             </a-col>
             <template v-if="advanced">
-              <a-col :md="8" :sm="24">
-                <a-form-item label="调用次数">
+              <a-col :md="4" :sm="24">
+                <a-form-item label="门店域名">
                   <a-input-number v-model="queryParam.callNo" style="width: 100%"/>
                 </a-form-item>
               </a-col>
-              <a-col :md="8" :sm="24">
-                <a-form-item label="更新日期">
-                  <a-date-picker v-model="queryParam.date" style="width: 100%" placeholder="请输入更新日期"/>
-                </a-form-item>
-              </a-col>
-              <a-col :md="8" :sm="24">
-                <a-form-item label="使用状态">
+              <a-col :md="4" :sm="24">
+                <a-form-item label="商品状态">
                   <a-select v-model="queryParam.useStatus" placeholder="请选择" default-value="0">
-                    <a-select-option value="0">全部</a-select-option>
-                    <a-select-option value="1">关闭</a-select-option>
-                    <a-select-option value="2">运行中</a-select-option>
-                  </a-select>
-                </a-form-item>
-              </a-col>
-              <a-col :md="8" :sm="24">
-                <a-form-item label="使用状态">
-                  <a-select placeholder="请选择" default-value="0">
-                    <a-select-option value="0">全部</a-select-option>
-                    <a-select-option value="1">关闭</a-select-option>
-                    <a-select-option value="2">运行中</a-select-option>
+                    <a-select-option value="0">已上架</a-select-option>
+                    <a-select-option value="1">已下架</a-select-option>
                   </a-select>
                 </a-form-item>
               </a-col>
@@ -63,7 +44,14 @@
       </div>
 
       <div class="table-operator">
-        <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>
+        <a-button type="primary" >上架</a-button>
+        <a-button type="danger" >下架</a-button>
+        <a-button type="primary" >推荐</a-button>
+        <a-button type="danger" >取消推荐</a-button>
+        <a-button type="primary" >审核通过</a-button>
+        <a-button type="danger" >审核不通过</a-button>
+        <a-button type="primary" >会员限购</a-button>
+        <a-button icon="delete" type="danger" >批量删除</a-button>
         <a-dropdown v-action:edit v-if="selectedRowKeys.length > 0">
           <a-menu slot="overlay">
             <a-menu-item key="1"><a-icon type="delete" />删除</a-menu-item>
@@ -138,7 +126,7 @@
             <a-divider type="vertical" />
             <a @click="handleEdit(record)">编辑</a>
             <a-divider type="vertical" />
-            <a @click="handleSub(record)">删除</a>
+            <a style="color:red" @click="handleSub(record)">删除</a>
           </template>
         </span>
       </s-table>

@@ -5,33 +5,41 @@
         <a-form layout="inline">
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
-              <a-form-item label="店铺编号">
+              <a-form-item label="门店ID">
                 <a-input v-model="queryParam.id" placeholder=""/>
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
-              <a-form-item label="店铺状态">
-                <a-select v-model="queryParam.status" placeholder="请选择" default-value="0">
-                  <a-select-option value="0">正常</a-select-option>
-                  <a-select-option value="1">禁用</a-select-option>
-                  <a-select-option value="2">待审核</a-select-option>
-                </a-select>
+              <a-form-item label="门店名称">
+                <a-input v-model="queryParam.name" placeholder=""/>
               </a-form-item>
             </a-col>
             <template v-if="advanced">
               <a-col :md="8" :sm="24">
-                <a-form-item label="店铺名称">
+                <a-form-item label="门店域名">
                   <a-input v-model="queryParam.mallname" style="width: 100%"/>
                 </a-form-item>
               </a-col>
               <a-col :md="8" :sm="24">
-                <a-form-item label="店铺类型">
+                <a-form-item label="用户ID">
                   <a-input v-model="queryParam.malltype" style="width: 100%"/>
                 </a-form-item>
               </a-col>
               <a-col :md="8" :sm="24">
-                <a-form-item label="店铺地址">
-                  <a-input v-model="queryParam.address" style="width: 100%"/>
+                <a-form-item label="门店状态">
+                  <a-select v-model="queryParam.status" placeholder="请选择" default-value="0">
+                    <a-select-option value="0">正常</a-select-option>
+                    <a-select-option value="1">禁用</a-select-option>
+                    <a-select-option value="2">待审核</a-select-option>
+                  </a-select>
+                </a-form-item>
+              </a-col>
+              <a-col :md="8" :sm="24">
+                <a-form-item label="个人/公司">
+                  <a-select v-model="queryParam.isCompany" placeholder="请选择" default-value="0">
+                    <a-select-option value="0">个人</a-select-option>
+                    <a-select-option value="1">公司</a-select-option>
+                  </a-select>
                 </a-form-item>
               </a-col>
               <a-col :md="8" :sm="24">
@@ -85,7 +93,7 @@
           <ellipsis :length="4" tooltip>{{ text }}</ellipsis>
         </span>
         <span slot="name" slot-scope="text">
-          <ellipsis :length="8" tooltip>{{ text }}门店</ellipsis>
+          <ellipsis :length="8" tooltip>{{ text }}</ellipsis>
         </span>
         <span slot="mallAdminUserId" slot-scope="text">
           {{ text }}
@@ -115,7 +123,7 @@
           <template>
             <a @click="handleEdit(record)">编辑</a>
             <a-divider type="vertical" />
-            <a @click="handleSub(record)">删除</a>
+            <a style="color:red" @click="handleSub(record)">删除</a>
           </template>
         </span>
       </s-table>
@@ -231,11 +239,11 @@ const statusMap = {
     text: '正常'
   },
   1: {
-    status: 'processing',
+    status: 'error',
     text: '禁用'
   },
   2: {
-    status: 'default',
+    status: 'processing',
     text: '待审核'
   }
 }

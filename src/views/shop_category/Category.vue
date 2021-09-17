@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <page-header-wrapper>
     <a-card :bordered="false" class="ant-pro-components-tag-select">
       <a-form :form="form" layout="inline">
         <standard-form-row title="所属类目" block style="padding-bottom: 11px;">
@@ -36,7 +36,11 @@
             </a-col>
             <a-col :lg="8" :md="10" :sm="10" :xs="24">
               <a-form-item :wrapper-col="{ sm: { span: 16 }, xs: { span: 24 } }" label="好评度">
-                <a-select style="max-width: 200px; width: 100%;" placeholder="不限" v-decorator="['rate']">
+                <a-select
+                  style="max-width: 200px; width: 100%;"
+                  placeholder="不限"
+                  v-decorator="['rate']"
+                >
                   <a-select-option value="good">优秀</a-select-option>
                   <a-select-option value="normal">普通</a-select-option>
                 </a-select>
@@ -47,61 +51,39 @@
       </a-form>
     </a-card>
 
-    <div class="ant-pro-pages-list-applications-filterCardList">
-      <a-list
-        :loading="loading"
-        :data-source="data"
-        :grid="{ gutter: 24, xl: 4, lg: 3, md: 3, sm: 2, xs: 1 }"
-        style="margin-top: 24px;"
-      >
+    <div class="ant-pro-pages-list-projects-cardList">
+      <a-list :loading="loading" :data-source="data" :grid="{ gutter: 24, xl: 4, lg: 3, md: 3, sm: 2, xs: 1 }">
         <a-list-item slot="renderItem" slot-scope="item">
-          <a-card :body-style="{ paddingBottom: 20 }" hoverable>
+          <a-card class="ant-pro-pages-list-projects-card" hoverable>
+            <img slot="cover" :src="item.cover" :alt="item.title" />
             <a-card-meta :title="item.title">
-              <template slot="avatar">
-                <a-avatar size="small" :src="item.avatar" />
+              <template slot="description">
+                <ellipsis :length="50">{{ item.description }}</ellipsis>
               </template>
             </a-card-meta>
-            <template slot="actions">
-              <a-tooltip title="下载">
-                <a-icon type="download" />
-              </a-tooltip>
-              <a-tooltip title="编辑">
-                <a-icon type="edit" />
-              </a-tooltip>
-              <a-tooltip title="分享">
-                <a-icon type="share-alt" />
-              </a-tooltip>
-              <a-dropdown>
-                <a class="ant-dropdown-link">
-                  <a-icon type="ellipsis" />
-                </a>
-                <a-menu slot="overlay">
-                  <a-menu-item>
-                    <a href="javascript:;">1st menu item</a>
-                  </a-menu-item>
-                  <a-menu-item>
-                    <a href="javascript:;">2nd menu item</a>
-                  </a-menu-item>
-                  <a-menu-item>
-                    <a href="javascript:;">3rd menu item</a>
-                  </a-menu-item>
-                </a-menu>
-              </a-dropdown>
-            </template>
-            <div class="">
-              <card-info active-user="100" new-user="999"></card-info>
+            <div class="cardItemContent">
+              <span>{{ item.updatedAt | fromNow }}</span>
+              <div class="avatarList">
+                <avatar-list size="small" :max-length="2">
+                  <avatar-list-item
+                    v-for="(member, i) in item.members"
+                    :key="`${item.id}-avatar-${i}`"
+                    :src="member.avatar"
+                    :tips="member.name"
+                  />
+                </avatar-list>
+              </div>
             </div>
           </a-card>
         </a-list-item>
       </a-list>
     </div>
-  </div>
+  </page-header-wrapper>
 </template>
 
 <script>
 import moment from 'moment'
 import { TagSelect, StandardFormRow, Ellipsis, AvatarList } from '@/components'
-import CardInfo from './components/CardInfo'
 const TagSelectOption = TagSelect.Option
 const AvatarListItem = AvatarList.Item
 
@@ -112,8 +94,7 @@ export default {
     Ellipsis,
     TagSelect,
     TagSelectOption,
-    StandardFormRow,
-    CardInfo
+    StandardFormRow
   },
   data () {
     return {
@@ -175,7 +156,7 @@ export default {
 
     > span {
       flex: 1 1;
-      color: rgba(0, 0, 0, 0.45);
+      color: rgba(0,0,0,.45);
       font-size: 12px;
     }
 
