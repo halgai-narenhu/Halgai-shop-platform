@@ -1,6 +1,8 @@
 import request from '@/utils/request'
 
 const api = {
+  category: '/category',
+  order: '/order',
   user: '/user',
   role: '/role',
   service: '/service',
@@ -31,6 +33,21 @@ export function getRoleList (parameter) {
 export function getServiceList (parameter) {
   return request({
     url: api.service,
+    method: 'get',
+    params: parameter
+  })
+}
+
+export function getCategory (parameter) {
+  return request({
+    url: api.category,
+    method: 'get',
+    params: parameter
+  })
+}
+export function getOrderList (parameter) {
+  return request({
+    url: api.order,
     method: 'get',
     params: parameter
   })

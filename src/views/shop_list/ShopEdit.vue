@@ -35,7 +35,7 @@
           :labelCol="{ lg: { span: 7 }, sm: { span: 7 } }"
           :wrapperCol="{ lg: { span: 10 }, sm: { span: 17 } }"
         >
-          <a-input v-decorator="['domain']" name="domain" :placeholder="$t('请输入门店域名')" />
+          <a-input v-decorator="['domain']" name="domain" disabled />
         </a-form-item>
         <a-form-item
           :label="$t('商品特征')"
@@ -47,11 +47,11 @@
         <a-form-item
           :label="$t('佣金')"
           :labelCol="{ lg: { span: 7 }, sm: { span: 7 } }"
-          :wrapperCol="{ lg: { span: 3 }, sm: { span: 17 } }"
+          :wrapperCol="{ lg: { span: 5 }, sm: { span: 17 } }"
         >
           <a-input
+            type="number"
             prefix="￥"
-            suffix="RMB"
             v-decorator="['commission']"
             name="commission"
             :placeholder="$t('请输入佣金金额')"
@@ -62,7 +62,7 @@
           :labelCol="{ lg: { span: 7 }, sm: { span: 7 } }"
           :wrapperCol="{ lg: { span: 10 }, sm: { span: 17 } }"
         >
-          <a-select default-value="" style="width: 120px">
+          <a-select v-decorator="['commissionType']" style="width: 120px">
             <a-select-option value="分销佣金"> 分销佣金 </a-select-option>
             <a-select-option value="推荐佣金"> 推荐佣金 </a-select-option>
             <a-select-option value="拼团佣金"> 拼团佣金 </a-select-option>
@@ -72,16 +72,16 @@
         <a-form-item
           :label="$t('积分')"
           :labelCol="{ lg: { span: 7 }, sm: { span: 7 } }"
-          :wrapperCol="{ lg: { span: 10 }, sm: { span: 17 } }"
+          :wrapperCol="{ lg: { span: 2 }, sm: { span: 17 } }"
         >
-          <a-input v-decorator="['gotScore']" name="gotScore" />
+          <a-input type="number" v-decorator="['gotScore']" name="gotScore" />
         </a-form-item>
         <a-form-item
           :label="$t('积分类型')"
           :labelCol="{ lg: { span: 7 }, sm: { span: 7 } }"
           :wrapperCol="{ lg: { span: 10 }, sm: { span: 17 } }"
         >
-          <a-select default-value="" style="width: 120px">
+          <a-select v-decorator="['gotScoreType']" style="width: 120px">
             <a-select-option value="固定积分"> 固定积分 </a-select-option>
             <a-select-option value="推荐积分"> 推荐积分 </a-select-option>
             <a-select-option value="分销积分"> 分销积分 </a-select-option>
@@ -92,28 +92,41 @@
           :labelCol="{ lg: { span: 7 }, sm: { span: 7 } }"
           :wrapperCol="{ lg: { span: 10 }, sm: { span: 17 } }"
         >
-          <a-input v-decorator="['kanjia']" name="kanjia" :placeholder="$t('')" />
+          <a-radio-group v-decorator="['kanjia']" >
+            <a-radio-button :value="'是'">
+              是
+            </a-radio-button>
+            <a-radio-button :value="'否'">
+              否
+            </a-radio-button>
+          </a-radio-group>
         </a-form-item>
         <a-form-item
           :label="$t('砍价价格')"
           :labelCol="{ lg: { span: 7 }, sm: { span: 7 } }"
           :wrapperCol="{ lg: { span: 3 }, sm: { span: 17 } }"
         >
-          <a-input prefix="￥" suffix="RMB" v-decorator="['kanjiaPrice']" name="kanjiaPrice" :placeholder="$t('')" />
+          <a-input prefix="￥" type="number" v-decorator="['kanjiaPrice']" name="kanjiaPrice" :placeholder="$t('')" />
         </a-form-item>
         <a-form-item
           :label="$t('物流')"
           :labelCol="{ lg: { span: 7 }, sm: { span: 7 } }"
           :wrapperCol="{ lg: { span: 10 }, sm: { span: 17 } }"
         >
-          <a-input v-decorator="['logisticsId']" name="logisticsId" :placeholder="$t('京东物流')" />
+          <a-select v-decorator="['logisticsId']" style="width: 120px">
+            <a-select-option value="京东物流"> 京东物流 </a-select-option>
+            <a-select-option value="韵达物流"> 韵达物流 </a-select-option>
+            <a-select-option value="兄弟物流"> 兄弟物流 </a-select-option>
+            <a-select-option value="EMS物流"> EMS物流 </a-select-option>
+            <a-select-option value="德邦物流"> 德邦物流 </a-select-option>
+          </a-select>
         </a-form-item>
         <a-form-item
           :label="$t('最低价')"
           :labelCol="{ lg: { span: 7 }, sm: { span: 7 } }"
           :wrapperCol="{ lg: { span: 3 }, sm: { span: 17 } }"
         >
-          <a-input prefix="￥" suffix="RMB" v-decorator="['minPrice']" name="minPrice" :placeholder="$t('')" />
+          <a-input prefix="￥" type="number" v-decorator="['minPrice']" name="minPrice" :placeholder="$t('')" />
         </a-form-item>
         <a-form-item
           :label="$t('最低积分')"
@@ -132,7 +145,7 @@
         <a-form-item
           :label="$t('信誉度')"
           :labelCol="{ lg: { span: 7 }, sm: { span: 7 } }"
-          :wrapperCol="{ lg: { span: 10 }, sm: { span: 17 } }"
+          :wrapperCol="{ lg: { span: 3 }, sm: { span: 17 } }"
         >
           <a-input type="number" v-decorator="['numberGoodReputation']" name="numberGoodReputation" :placeholder="$t('')" />
         </a-form-item>
@@ -153,14 +166,14 @@
         <a-form-item
           :label="$t('原价')"
           :labelCol="{ lg: { span: 7 }, sm: { span: 7 } }"
-          :wrapperCol="{ lg: { span: 10 }, sm: { span: 17 } }"
+          :wrapperCol="{ lg: { span: 3 }, sm: { span: 17 } }"
         >
-          <a-input v-decorator="['originalPrice']" name="originalPrice" :placeholder="$t('自定义店铺类型，32个字符以内')" />
+          <a-input prefix="￥" type="number" v-decorator="['originalPrice']" name="originalPrice"/>
         </a-form-item>
         <a-form-item
           :label="$t('排序')"
           :labelCol="{ lg: { span: 7 }, sm: { span: 7 } }"
-          :wrapperCol="{ lg: { span: 10 }, sm: { span: 17 } }"
+          :wrapperCol="{ lg: { span: 3 }, sm: { span: 17 } }"
         >
           <a-input type="number" v-decorator="['paixu']" name="paixu" :placeholder="$t('')" />
         </a-form-item>
@@ -176,35 +189,45 @@
           :labelCol="{ lg: { span: 7 }, sm: { span: 7 } }"
           :wrapperCol="{ lg: { span: 10 }, sm: { span: 17 } }"
         >
-          <a-input v-decorator="['pingtuan']" name="pingtuan" :placeholder="$t('')" />
+          <a-radio-group v-decorator="['pingtuan']" >
+            <a-radio-button :value="'是'">
+              是
+            </a-radio-button>
+            <a-radio-button :value="'否'">
+              否
+            </a-radio-button>
+          </a-radio-group>
         </a-form-item>
         <a-form-item
           :label="$t('拼团价')"
           :labelCol="{ lg: { span: 7 }, sm: { span: 7 } }"
           :wrapperCol="{ lg: { span: 3 }, sm: { span: 17 } }"
         >
-          <a-input prefix="￥" suffix="RMB" v-decorator="['pingtuanPrice']" name="pingtuanPrice"/>
+          <a-input prefix="￥" type="number" v-decorator="['pingtuanPrice']" name="pingtuanPrice"/>
         </a-form-item>
         <a-form-item
           :label="$t('推荐状态')"
           :labelCol="{ lg: { span: 7 }, sm: { span: 7 } }"
           :wrapperCol="{ lg: { span: 10 }, sm: { span: 17 } }"
         >
-          <a-input v-decorator="['recommendStatus']" name="recommendStatus" :placeholder="$t('推荐状态')" />
+          <a-select v-decorator="['recommendStatus']" style="width: 120px">
+            <a-select-option value="推荐"> 推荐 </a-select-option>
+            <a-select-option value="不推荐"> 不推荐 </a-select-option>
+          </a-select>
         </a-form-item>
         <a-form-item
           :label="$t('商品状态')"
           :labelCol="{ lg: { span: 7 }, sm: { span: 7 } }"
           :wrapperCol="{ lg: { span: 10 }, sm: { span: 17 } }"
         >
-          <a-radio-group v-decorator="['status']" >
-            <a-radio-button :value="0">
+          <a-radio-group v-decorator="['statusStr']" >
+            <a-radio-button :value="'正常'">
               正常
             </a-radio-button>
-            <a-radio-button :value="1">
+            <a-radio-button :value="'禁用'">
               禁用
             </a-radio-button>
-            <a-radio-button :value="2">
+            <a-radio-button :value="'待审核'">
               待审核
             </a-radio-button>
           </a-radio-group>
@@ -235,11 +258,15 @@
           :labelCol="{ lg: { span: 7 }, sm: { span: 7 } }"
           :wrapperCol="{ lg: { span: 10 }, sm: { span: 17 } }"
         >
-          <a-input v-decorator="['content']" name="content" :placeholder="$t('描述')" />
+          <a-textarea
+            v-decorator="['content']"
+            placeholder="Controlled autosize"
+            :auto-size="{ minRows: 5, maxRows: 8 }"
+          />
         </a-form-item>
         <a-form-item :wrapperCol="{ span: 24 }" style="text-align: center">
           <a-button htmlType="submit" type="primary">{{ $t('提交') }}</a-button>
-          <a-button style="margin-left: 8px">{{ $t('返回') }}</a-button>
+          <a-button @click="handleCancel" style="margin-left: 8px">{{ $t('返回') }}</a-button>
         </a-form-item>
       </a-form>
     </a-card>
@@ -274,6 +301,9 @@ export default {
           console.log('Received values of form: ', values)
         }
       })
+    },
+    handleCancel () {
+      this.$router.go(-1)
     }
   }
 }

@@ -1,168 +1,264 @@
 <template>
   <page-header-wrapper>
-    <a-card :bordered="false" class="ant-pro-components-tag-select">
-      <a-form :form="form" layout="inline">
-        <standard-form-row title="所属类目" block style="padding-bottom: 11px;">
-          <a-form-item>
-            <tag-select>
-              <tag-select-option value="Category1">类目一</tag-select-option>
-              <tag-select-option value="Category2">类目二</tag-select-option>
-              <tag-select-option value="Category3">类目三</tag-select-option>
-              <tag-select-option value="Category4">类目四</tag-select-option>
-              <tag-select-option value="Category5">类目五</tag-select-option>
-              <tag-select-option value="Category6">类目六</tag-select-option>
-              <tag-select-option value="Category7">类目七</tag-select-option>
-              <tag-select-option value="Category8">类目八</tag-select-option>
-              <tag-select-option value="Category9">类目九</tag-select-option>
-              <tag-select-option value="Category10">类目十</tag-select-option>
-            </tag-select>
-          </a-form-item>
-        </standard-form-row>
-
-        <standard-form-row title="其它选项" grid last>
-          <a-row>
-            <a-col :lg="8" :md="10" :sm="10" :xs="24">
-              <a-form-item :wrapper-col="{ sm: { span: 16 }, xs: { span: 24 } }" label="作者">
-                <a-select
-                  style="max-width: 200px; width: 100%;"
-                  mode="multiple"
-                  placeholder="不限"
-                  v-decorator="['author']"
-                  @change="handleChange"
-                >
-                  <a-select-option value="lisa">王昭君</a-select-option>
+    <a-card :bordered="false">
+      <div class="table-page-search-wrapper">
+        <a-form layout="inline">
+          <a-row :gutter="10">
+            <a-col :md="4" :sm="24">
+              <a-form-item label="订单状态">
+                <a-select v-model="queryParam.status" placeholder="所属门店" default-value="0">
+                  <a-select-option value="0">小张的店</a-select-option>
+                  <a-select-option value="1">小样的店</a-select-option>
+                  <a-select-option value="2">小王的店</a-select-option>
+                  <a-select-option value="3">小元的店</a-select-option>
+                  <a-select-option value="4">小那的店</a-select-option>
+                  <a-select-option value="5">小青的店</a-select-option>
                 </a-select>
               </a-form-item>
             </a-col>
-            <a-col :lg="8" :md="10" :sm="10" :xs="24">
-              <a-form-item :wrapper-col="{ sm: { span: 16 }, xs: { span: 24 } }" label="好评度">
-                <a-select
-                  style="max-width: 200px; width: 100%;"
-                  placeholder="不限"
-                  v-decorator="['rate']"
-                >
-                  <a-select-option value="good">优秀</a-select-option>
-                  <a-select-option value="normal">普通</a-select-option>
-                </a-select>
-              </a-form-item>
+            <a-col :md="2" :sm="24">
+              <a-button type="primary" icon="search">搜索</a-button>
+            </a-col>
+            <a-col :md="2" :sm="24">
+              <a-button type="dash" icon="plus" @click="handleAdd">添加分类</a-button>
+            </a-col>
+            <a-col :md="2" :sm="24">
+              <a-button type="danger" icon="delete">删除所有类目</a-button>
             </a-col>
           </a-row>
-        </standard-form-row>
-      </a-form>
-    </a-card>
+        </a-form>
+      </div>
 
-    <div class="ant-pro-pages-list-projects-cardList">
-      <a-list :loading="loading" :data-source="data" :grid="{ gutter: 24, xl: 4, lg: 3, md: 3, sm: 2, xs: 1 }">
-        <a-list-item slot="renderItem" slot-scope="item">
-          <a-card class="ant-pro-pages-list-projects-card" hoverable>
-            <img slot="cover" :src="item.cover" :alt="item.title" />
-            <a-card-meta :title="item.title">
-              <template slot="description">
-                <ellipsis :length="50">{{ item.description }}</ellipsis>
-              </template>
-            </a-card-meta>
-            <div class="cardItemContent">
-              <span>{{ item.updatedAt | fromNow }}</span>
-              <div class="avatarList">
-                <avatar-list size="small" :max-length="2">
-                  <avatar-list-item
-                    v-for="(member, i) in item.members"
-                    :key="`${item.id}-avatar-${i}`"
-                    :src="member.avatar"
-                    :tips="member.name"
-                  />
-                </avatar-list>
-              </div>
-            </div>
-          </a-card>
-        </a-list-item>
-      </a-list>
-    </div>
+      <s-table
+        ref="table"
+        size="default"
+        rowKey="key"
+        :columns="columns"
+        :data="loadData"
+        :alert="true"
+        :rowSelection="rowSelection"
+        showPagination="auto"
+      >
+        <span slot="isUse" slot-scope="text">
+          <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
+        </span>
+        <span slot="action" slot-scope="text, record">
+          <template>
+            <a @click="handleEdit(record)">编辑</a>
+            <a-divider type="vertical" />
+            <a style="color:red">删除</a>
+          </template>
+        </span>
+      </s-table>
+
+      <create-form
+        ref="createModal"
+        :visible="visible"
+        :loading="confirmLoading"
+        :model="mdl"
+        @cancel="handleCancel"
+        @ok="handleOk"
+      />
+      <step-by-step-modal ref="modal" @ok="handleOk"/>
+    </a-card>
   </page-header-wrapper>
 </template>
 
 <script>
 import moment from 'moment'
-import { TagSelect, StandardFormRow, Ellipsis, AvatarList } from '@/components'
-const TagSelectOption = TagSelect.Option
-const AvatarListItem = AvatarList.Item
+import { STable, Ellipsis } from '@/components'
+import { getCategory, getRoleList } from '@/api/manage'
+import CreateForm from './modules/CreateForm'
+
+const columns = [
+  {
+    title: '编号',
+    dataIndex: 'id'
+  },
+  {
+    title: '名称',
+    dataIndex: 'name'
+  },
+  {
+    title: '类型',
+    dataIndex: 'type'
+  },
+  {
+    title: '图标',
+    dataIndex: 'icon'
+  },
+  {
+    title: '域名',
+    dataIndex: 'domain'
+  },
+  {
+    title: '状态',
+    dataIndex: 'isUse',
+    scopedSlots: { customRender: 'isUse' }
+  },
+  {
+    title: '添加时间',
+    dataIndex: 'dateAdd'
+  },
+  {
+    title: '更新时间',
+    dataIndex: 'dateUpdate'
+  },
+  {
+    title: '操作',
+    dataIndex: 'action',
+    width: '150px',
+    scopedSlots: { customRender: 'action' }
+  }
+]
+
+const statusMap = {
+  '启用': {
+    status: 'success',
+    text: '启用'
+  },
+  '禁用': {
+    status: 'error',
+    text: '禁用'
+  },
+  2: {
+    status: 'success',
+    text: '已上线'
+  },
+  3: {
+    status: 'error',
+    text: '异常'
+  }
+}
 
 export default {
+  name: 'TableList',
   components: {
-    AvatarList,
-    AvatarListItem,
+    STable,
     Ellipsis,
-    TagSelect,
-    TagSelectOption,
-    StandardFormRow
+    CreateForm
   },
   data () {
+    this.columns = columns
     return {
-      data: [],
-      form: this.$form.createForm(this),
-      loading: true
+      // create model
+      visible: false,
+      confirmLoading: false,
+      mdl: null,
+      // 高级搜索 展开/关闭
+      advanced: false,
+      // 查询参数
+      queryParam: {},
+      // 加载数据方法 必须为 Promise 对象
+      loadData: parameter => {
+        const requestParameters = Object.assign({}, parameter, this.queryParam)
+        console.log('loadData request parameters:', requestParameters)
+        return getCategory(requestParameters)
+          .then(res => {
+            return res.result
+          })
+      },
+      selectedRowKeys: [],
+      selectedRows: []
     }
   },
   filters: {
-    fromNow (date) {
-      return moment(date).fromNow()
+    statusFilter (type) {
+      return statusMap[type].text
+    },
+    statusTypeFilter (type) {
+      return statusMap[type].status
     }
   },
-  mounted () {
-    this.getList()
+  created () {
+    getRoleList({ t: new Date() })
+  },
+  computed: {
+    rowSelection () {
+      return {
+        selectedRowKeys: this.selectedRowKeys,
+        onChange: this.onSelectChange
+      }
+    }
   },
   methods: {
-    handleChange (value) {
-      console.log(`selected ${value}`)
+    handleAdd () {
+      this.mdl = null
+      this.visible = true
     },
-    getList () {
-      this.$http.get('/list/article', { params: { count: 8 } }).then(res => {
-        console.log('res', res)
-        this.data = res.result
-        this.loading = false
+    handleEdit (record) {
+      this.visible = true
+      this.mdl = { ...record }
+    },
+    handleOk () {
+      const form = this.$refs.createModal.form
+      this.confirmLoading = true
+      form.validateFields((errors, values) => {
+        if (!errors) {
+          console.log('values', values)
+          if (values.id > 0) {
+            // 修改 e.g.
+            new Promise((resolve, reject) => {
+              setTimeout(() => {
+                resolve()
+              }, 1000)
+            }).then(res => {
+              this.visible = false
+              this.confirmLoading = false
+              // 重置表单数据
+              form.resetFields()
+              // 刷新表格
+              this.$refs.table.refresh()
+
+              this.$message.info('修改成功')
+            })
+          } else {
+            // 新增
+            new Promise((resolve, reject) => {
+              setTimeout(() => {
+                resolve()
+              }, 1000)
+            }).then(res => {
+              this.visible = false
+              this.confirmLoading = false
+              // 重置表单数据
+              form.resetFields()
+              // 刷新表格
+              this.$refs.table.refresh()
+
+              this.$message.info('新增成功')
+            })
+          }
+        } else {
+          this.confirmLoading = false
+        }
       })
+    },
+    handleCancel () {
+      this.visible = false
+
+      const form = this.$refs.createModal.form
+      form.resetFields() // 清理表单数据（可不做）
+    },
+    handleSub (record) {
+      if (record.status !== 0) {
+        this.$message.info(`${record.no} 订阅成功`)
+      } else {
+        this.$message.error(`${record.no} 订阅失败，规则已关闭`)
+      }
+    },
+    onSelectChange (selectedRowKeys, selectedRows) {
+      this.selectedRowKeys = selectedRowKeys
+      this.selectedRows = selectedRows
+    },
+    toggleAdvanced () {
+      this.advanced = !this.advanced
+    },
+    resetSearchForm () {
+      this.queryParam = {
+        date: moment(new Date())
+      }
     }
   }
 }
 </script>
-
-<style lang="less" scoped>
-.ant-pro-components-tag-select {
-  /deep/ .ant-pro-tag-select .ant-tag {
-    margin-right: 24px;
-    padding: 0 8px;
-    font-size: 14px;
-  }
-}
-.ant-pro-pages-list-projects-cardList {
-  margin-top: 24px;
-
-  /deep/ .ant-card-meta-title {
-    margin-bottom: 4px;
-  }
-
-  /deep/ .ant-card-meta-description {
-    height: 44px;
-    overflow: hidden;
-    line-height: 22px;
-  }
-
-  .cardItemContent {
-    display: flex;
-    height: 20px;
-    margin-top: 16px;
-    margin-bottom: -4px;
-    line-height: 20px;
-
-    > span {
-      flex: 1 1;
-      color: rgba(0,0,0,.45);
-      font-size: 12px;
-    }
-
-    /deep/ .ant-pro-avatar-list {
-      flex: 0 1 auto;
-    }
-  }
-}
-</style>
