@@ -1,23 +1,23 @@
 <template>
   <page-header-wrapper>
     <a-card :bordered="false">
-      <a-descriptions title="退款申请">
-        <a-descriptions-item label="取货单号">1000000000</a-descriptions-item>
-        <a-descriptions-item label="状态">已取货</a-descriptions-item>
-        <a-descriptions-item label="销售单号">1234123421</a-descriptions-item>
-        <a-descriptions-item label="子订单">3214321432</a-descriptions-item>
+      <a-descriptions title="订单信息">
+        <a-descriptions-item label="订单ID">{{ param.id }}</a-descriptions-item>
+        <a-descriptions-item label="订单编号">{{ param.orderNumber }}</a-descriptions-item>
+        <a-descriptions-item label="订单状态">{{ param.status }}</a-descriptions-item>
+        <a-descriptions-item label="订单金额">{{ param.amount }}</a-descriptions-item>
       </a-descriptions>
       <a-divider style="margin-bottom: 32px"/>
       <a-descriptions title="用户信息">
-        <a-descriptions-item label="用户姓名">付小小</a-descriptions-item>
-        <a-descriptions-item label="联系电话">18100000000</a-descriptions-item>
-        <a-descriptions-item label="常用快递">菜鸟仓储</a-descriptions-item>
-        <a-descriptions-item label="取货地址">浙江省杭州市西湖区万塘路18号</a-descriptions-item>
-        <a-descriptions-item label="备注">	无</a-descriptions-item>
+        <a-descriptions-item label="用户昵称"></a-descriptions-item>
+        <a-descriptions-item label="用户电话"></a-descriptions-item>
+        <a-descriptions-item label="快递"></a-descriptions-item>
+        <a-descriptions-item label="用户地址"></a-descriptions-item>
+        <a-descriptions-item label="下单IP">{{ param.userIp }}</a-descriptions-item>
       </a-descriptions>
       <a-divider style="margin-bottom: 32px"/>
 
-      <div class="title">退货商品</div>
+      <div class="title">订单商品</div>
       <s-table
         style="margin-bottom: 24px"
         row-key="id"
@@ -26,7 +26,7 @@
 
       </s-table>
 
-      <div class="title">退货进度</div>
+      <div class="title">快递信息</div>
       <s-table
         style="margin-bottom: 24px"
         row-key="key"
@@ -53,6 +53,7 @@ export default {
   },
   data () {
     return {
+      param: this.$route.params,
       goodsColumns: [
         {
           title: '商品编号',
@@ -171,7 +172,7 @@ export default {
               {
                 key: '1',
                 time: '2017-10-01 14:10',
-                rate: '联系客户',
+                rate: '前往目的地',
                 status: 'processing',
                 operator: '取货员 ID1234',
                 cost: '5mins'
@@ -179,7 +180,7 @@ export default {
               {
                 key: '2',
                 time: '2017-10-01 14:05',
-                rate: '取货员出发',
+                rate: '到达中转站',
                 status: 'success',
                 operator: '取货员 ID1234',
                 cost: '1h'
@@ -187,7 +188,7 @@ export default {
               {
                 key: '3',
                 time: '2017-10-01 13:05',
-                rate: '取货员接单',
+                rate: '从发货地出发',
                 status: 'success',
                 operator: '取货员 ID1234',
                 cost: '5mins'
@@ -195,7 +196,7 @@ export default {
               {
                 key: '4',
                 time: '2017-10-01 13:00',
-                rate: '申请审批通过',
+                rate: '装车',
                 status: 'success',
                 operator: '系统',
                 cost: '1h'
@@ -203,9 +204,9 @@ export default {
               {
                 key: '5',
                 time: '2017-10-01 12:00',
-                rate: '发起退货申请',
+                rate: '出库',
                 status: 'success',
-                operator: '用户',
+                operator: '系统',
                 cost: '5mins'
               }
             ],

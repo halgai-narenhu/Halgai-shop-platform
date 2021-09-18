@@ -107,7 +107,7 @@
 <script>
 import moment from 'moment'
 import { STable, Ellipsis } from '@/components'
-import { getRoleList, getServiceList } from '@/api/manage'
+import { getOrderList, getRoleList } from '@/api/manage'
 
 import StepByStepModal from './modules/StepByStepModal'
 import CreateForm from './modules/CreateForm'
@@ -123,31 +123,31 @@ const columns = [
   },
   {
     title: '用户信息',
-    dataIndex: 'no'
+    dataIndex: 'userinfo'
   },
   {
     title: '下单IP',
-    dataIndex: 'no'
+    dataIndex: 'userIp'
   },
   {
     title: '订单号',
-    dataIndex: 'no'
+    dataIndex: 'orderNumber'
   },
   {
     title: '状态',
-    dataIndex: 'no'
+    dataIndex: 'status'
   },
   {
-    title: '总价',
-    dataIndex: 'no'
+    title: '订单金额',
+    dataIndex: 'amount'
   },
   {
     title: '实收',
-    dataIndex: 'no'
+    dataIndex: 'amountReal'
   },
   {
     title: '订单更新时间',
-    dataIndex: 'no'
+    dataIndex: 'dateAdd'
   },
   {
     title: '操作',
@@ -199,7 +199,7 @@ export default {
       loadData: parameter => {
         const requestParameters = Object.assign({}, parameter, this.queryParam)
         console.log('loadData request parameters:', requestParameters)
-        return getServiceList(requestParameters)
+        return getOrderList(requestParameters)
           .then(res => {
             return res.result
           })

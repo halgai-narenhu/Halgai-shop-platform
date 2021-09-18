@@ -105,17 +105,14 @@
           {{ text }}
         </span>
         <span slot="statusStr" slot-scope="text">
-          {{ text }}
+          <a-badge :status="text | statusStrTypeFilter" :text="text | statusStrFilter" />
         </span>
         <span slot="pic" slot-scope="text">
           {{ text }}
         </span>
-        <span slot="pic" slot-scope="text">
-          {{ text }}
-        </span>
-        <span slot="status" slot-scope="text">
+        <!-- <span slot="status" slot-scope="text">
           <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
-        </span>
+        </span> -->
         <span slot="description" slot-scope="text">
           <ellipsis :length="4" tooltip>{{ text }}</ellipsis>
         </span>
@@ -166,6 +163,12 @@ const columns = [
     // name
     title: '商品名称',
     dataIndex: 'name'
+  },
+  {
+    // statusStr
+    title: '商品状态',
+    dataIndex: 'statusStr',
+    scopedSlots: { customRender: 'statusStr' }
   },
   // {
   //   // barCode
@@ -336,11 +339,6 @@ const columns = [
   //   title: '推荐状态',
   //   dataIndex: 'no'
   // },
-  {
-    // statusStr
-    title: '商品状态',
-    dataIndex: 'statusStr'
-  },
   // {
   //   // dateAdd
   //   title: '添加时间',
@@ -374,17 +372,17 @@ const statusMap = {
     status: 'default',
     text: '关闭'
   },
-  1: {
+  '待审核': {
     status: 'processing',
-    text: '运行中'
+    text: '待审核'
   },
-  2: {
+  '正常': {
     status: 'success',
-    text: '已上线'
+    text: '正常'
   },
-  3: {
+  '禁用': {
     status: 'error',
-    text: '异常'
+    text: '禁用'
   }
 }
 
@@ -421,6 +419,12 @@ export default {
     }
   },
   filters: {
+    statusStrFilter (type) {
+      return statusMap[type].text
+    },
+    statusStrTypeFilter (type) {
+      return statusMap[type].status
+    },
     statusFilter (type) {
       return statusMap[type].text
     },
